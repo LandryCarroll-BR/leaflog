@@ -13,4 +13,5 @@ public record PlantId(Long value) {
     private boolean isNegative(long value) {
         return value <= 0;
     }
+
 }

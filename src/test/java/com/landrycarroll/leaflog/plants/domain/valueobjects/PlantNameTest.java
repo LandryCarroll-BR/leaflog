@@ -25,6 +25,7 @@ public class PlantNameTest {
                 DomainValidationException.class,
                 () -> new PlantName("")
         );
+        assertEquals("PlantName must not be null", ex.getMessage());
     }
 
     @Test public void shouldThrowExceptionWhenExceedsMaxLength() {
