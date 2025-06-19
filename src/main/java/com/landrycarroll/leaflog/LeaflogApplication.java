@@ -35,6 +35,7 @@ public class LeaflogApplication {
         Runnable saveWateringIntervalFromInput = new SaveWateringIntervalController(io, saveWateringIntervalUseCase);
         Runnable waterPlantFromInput = new WaterPlantController(io, waterPlantUseCase);
         Runnable viewPlantList = new ViewPlantListController(io, viewPlantListUseCase);
+        Runnable addPlantsFromFile = new AddPlantsFromFileController(io, addPlantFromInputUseCase);
 
         // Construct Menu
         new MenuBuilder(io)
@@ -44,6 +45,7 @@ public class LeaflogApplication {
                 .addOption("Update the Watering Interval", saveWateringIntervalFromInput)
                 .addOption("Water a plant", waterPlantFromInput)
                 .addOption("View plant list", viewPlantList)
+                .addOption("Add plant from file", addPlantsFromFile)
                 .build();
 
     }
