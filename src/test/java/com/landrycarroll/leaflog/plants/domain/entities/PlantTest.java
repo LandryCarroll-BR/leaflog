@@ -1,7 +1,6 @@
 package com.landrycarroll.leaflog.plants.domain.entities;
 
 
-import com.landrycarroll.leaflog.plants.domain.valueobjects.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

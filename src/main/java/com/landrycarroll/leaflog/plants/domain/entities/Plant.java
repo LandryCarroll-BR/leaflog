@@ -104,4 +104,16 @@ public class Plant {
         this.lastWatered = lastWatered;
     }
 
+    @Override
+    public String toString() {
+        return "Plant{" +
+                "id=" + id.value() +
+                ", name=" + name.value() +
+                ", species=" + species.value() +
+                ", lastWatered=" + lastWatered.value() +
+                ", wateringFrequency=" + wateringFrequency.value() +
+                ", notes=" + notes.value() +
+                '}';
+    }
 }
+
