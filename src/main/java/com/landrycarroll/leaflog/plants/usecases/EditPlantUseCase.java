@@ -22,7 +22,7 @@ public class EditPlantUseCase {
             Plant plant = plantRepository.findById(id);
 
             if (plant == null) {
-                throw new UseCaseException("EditPlantUseCase#execute: plant not found");
+                throw new UseCaseException("EditPlantUseCase#execute: Plant with id " + id + " not found");
             }
 
             plant.updateDetails(dto.getName(), dto.getSpecies(), dto.getNotes());

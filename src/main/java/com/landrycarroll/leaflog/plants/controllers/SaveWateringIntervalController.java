@@ -24,7 +24,7 @@ public class SaveWateringIntervalController implements Runnable {
             String id = io.readInput("Enter the Id of the plant: ");
             String wateringFrequencyAsString = io.readInput("Enter the wateringFrequency: ");
 
-            // Pass the values into the use case and attempt to add patron
+            // Pass the values into the use case and attempt to add plant
             Plant plant = useCase.execute(new SaveWateringIntervalDTO(wateringFrequencyAsString, id));
 
             // Create CLI Table headers

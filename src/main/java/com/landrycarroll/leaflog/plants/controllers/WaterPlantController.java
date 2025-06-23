@@ -25,7 +25,7 @@ public class WaterPlantController implements Runnable {
             // Gather all inputs from user
             String id = io.readInput("Enter the Id of the plant: ");
 
-            // Pass the values into the use case and attempt to add patron
+            // Pass the values into the use case and attempt to add plant
             Plant plant = useCase.execute(new WaterPlantDTO(id));
 
             // Create CLI Table headers

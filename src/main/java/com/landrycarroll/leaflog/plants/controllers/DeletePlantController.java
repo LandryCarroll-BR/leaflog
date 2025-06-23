@@ -22,10 +22,13 @@ public class DeletePlantController implements Runnable {
             String plantId = io.readInput("Enter the id of the plant: ");
 
             // Pass the values into the use case and attempt to add plant
-            boolean plant = useCase.execute(new DeletePlantDTO(plantId));
+            boolean success = useCase.execute(new DeletePlantDTO(plantId));
 
-            // Create CLI Table headers
-            io.writeOutput("Plant deleted successfully!");
+            if (success) {
+                io.writeOutput("Plant deleted successfully!");
+            } else {
+                io.writeOutput("Plant could not be deleted!");
+            }
 
             // Extra spacing for CLI
             io.writeOutput("\n");

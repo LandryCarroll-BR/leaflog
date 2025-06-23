@@ -21,6 +21,11 @@ public class WaterPlantUseCase {
             long id = Long.parseLong(String.valueOf(dto.getId()));
 
             Plant plant = this.plantRepository.findById(id);
+
+            if (plant == null) {
+                throw new UseCaseException("WaterPlantUseCase#execute: Plant with id " + id + " not found");
+            }
+
             plant.markAsWatered();
             this.plantRepository.save(plant);
             return plant;

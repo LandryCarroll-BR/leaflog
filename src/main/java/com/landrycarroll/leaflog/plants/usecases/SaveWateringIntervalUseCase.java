@@ -22,12 +22,16 @@ public class SaveWateringIntervalUseCase {
         }
 
         try {
-
             int frequency = Integer.parseInt(dto.getWateringInterval());
 
             long id = Long.parseLong(String.valueOf(dto.getPlantId()));
 
             Plant plant = plantRepository.findById(id);
+
+            if (plant == null) {
+                throw new UseCaseException("SaveWateringIntervalUseCase#execute: Plant with id " + id + " not found");
+            }
+
             plant.updateWateringFrequency(frequency);
             this.plantRepository.update(plant);
             return plant;

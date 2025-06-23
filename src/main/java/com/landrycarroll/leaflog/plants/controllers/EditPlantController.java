@@ -30,7 +30,7 @@ public class EditPlantController implements Runnable {
             String wateringFrequencyAsString = io.readInput("Enter the wateringFrequency: ");
             String notes = io.readInput("Enter any notes for the plant: ");
 
-            // Pass the values into the use case and attempt to add patron
+            // Pass the values into the use case and attempt to add plant
             Plant plant = useCase.execute(new EditPlantDTO(id, name, species, notes, wateringFrequencyAsString));
 
             // Create CLI Table headers

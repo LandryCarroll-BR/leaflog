@@ -1,5 +1,6 @@
 package com.landrycarroll.leaflog.plants.usecases;
 
+import com.landrycarroll.leaflog.plants.domain.entities.Plant;
 import com.landrycarroll.leaflog.plants.repositories.PlantRepository;
 import com.landrycarroll.leaflog.plants.usecases.dtos.DeletePlantDTO;
 import com.landrycarroll.leaflog.plants.usecases.exceptions.UseCaseException;
@@ -13,11 +14,17 @@ public class DeletePlantUseCase {
 
     public boolean execute(DeletePlantDTO dto) {
         if (dto == null) {
-            throw new UseCaseException("DeletePlantUseCase#execute called with null dto");
+            throw new UseCaseException("DeletePlantUseCase#execute Plant not found");
         }
 
         try {
-            Long id = Long.valueOf(dto.getId());
+            long id = Long.parseLong(dto.getId());
+
+            Plant exitingPlant = this.plantRepository.findById(id);
+
+            if (exitingPlant == null) {
+                throw new UseCaseException("DeletePlantUseCase#execute: Plant with id " + id + " not found");
+            }
 
             this.plantRepository.deleteById(id);
 

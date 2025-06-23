@@ -27,7 +27,9 @@ public class ViewPlantListController implements Runnable {
             // Create CLI Table headers
             io.writeOutput("Plant deleted successfully!");
 
-            io.writeOutput(plantList.toString());
+            for (Plant plant : plantList) {
+                io.writeOutput(plant.toString());
+            }
 
             // Extra spacing for CLI
             io.writeOutput("\n");

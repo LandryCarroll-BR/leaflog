@@ -18,11 +18,9 @@ public class AddPlantUseCase {
         }
 
         try {
-
             int wateringFrequency = Integer.parseInt(dto.wateringFrequencyAsString());
 
             Plant plant = new Plant(dto.getName(), dto.getSpecies(), dto.getLastWatered(), wateringFrequency, dto.getNotes());
-
 
             repository.save(plant);
 

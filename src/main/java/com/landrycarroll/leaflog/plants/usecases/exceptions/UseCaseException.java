@@ -5,3 +5,4 @@ public class UseCaseException extends RuntimeException {
         super(message);
     }
 }
+
