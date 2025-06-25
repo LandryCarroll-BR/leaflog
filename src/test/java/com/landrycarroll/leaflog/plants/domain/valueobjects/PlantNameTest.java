@@ -1,12 +1,14 @@
 package com.landrycarroll.leaflog.plants.domain.valueobjects;
 
-import com.landrycarroll.leaflog.plants.domain.exceptions.DomainValidationException;
+import com.landrycarroll.leaflog.plants.exceptions.DomainValidationException;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlantNameTest {
 
-    @Test public void shouldCreatePlantName() {
+    @Test
+    public void shouldCreatePlantName() {
         PlantName plantName = new PlantName("test");
         assertEquals("test", plantName.value());
     }
@@ -20,7 +22,8 @@ public class PlantNameTest {
         assertEquals("PlantName must not be null", ex.getMessage());
     }
 
-    @Test public void shouldThrowExceptionWhenEmpty() {
+    @Test
+    public void shouldThrowExceptionWhenEmpty() {
         DomainValidationException ex = assertThrows(
                 DomainValidationException.class,
                 () -> new PlantName("")
@@ -28,7 +31,8 @@ public class PlantNameTest {
         assertEquals("PlantName must not be null", ex.getMessage());
     }
 
-    @Test public void shouldThrowExceptionWhenExceedsMaxLength() {
+    @Test
+    public void shouldThrowExceptionWhenExceedsMaxLength() {
         int MAXIMUM_NAME_LENGTH = 64;
 
         StringBuilder maxLengthString = new StringBuilder("0");

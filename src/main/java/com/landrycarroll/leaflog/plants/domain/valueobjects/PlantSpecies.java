@@ -1,9 +1,9 @@
 package com.landrycarroll.leaflog.plants.domain.valueobjects;
 
-import com.landrycarroll.leaflog.plants.domain.exceptions.DomainValidationException;
+import com.landrycarroll.leaflog.plants.exceptions.DomainValidationException;
 
 public record PlantSpecies(String value) {
-    public PlantSpecies{
+    public PlantSpecies {
         if (isNullOrEmpty(value)) {
             throw new DomainValidationException("PlantSpecies must not be null or empty");
         }

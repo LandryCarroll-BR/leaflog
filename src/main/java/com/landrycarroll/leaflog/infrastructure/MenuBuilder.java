@@ -76,7 +76,7 @@ public class MenuBuilder {
             controller.run();
 
         } catch (Exception e) {
-            io.writeOutput("Invalid option: " + input);
+            io.writeOutput("Invalid option: " + input + e.getMessage());
         }
     }
 }

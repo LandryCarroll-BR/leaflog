@@ -1,7 +1,7 @@
 package com.landrycarroll.leaflog.plants.domain.valueobjects;
 
 
-import com.landrycarroll.leaflog.plants.domain.exceptions.DomainValidationException;
+import com.landrycarroll.leaflog.plants.exceptions.DomainValidationException;
 import org.junit.jupiter.api.Test;
 
 
