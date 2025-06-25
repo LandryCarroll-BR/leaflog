@@ -46,10 +46,12 @@ public class PlantController {
 
                 // Extra spacing for CLI
                 io.writeOutput("\n");
+                break;
             } catch (PlantException.PlantAlreadyExists e) {
                 io.writeOutput("A plant with that ID already exists. Please try again.\n");
             } catch (PlantException.InvalidInput e) {
                 io.writeOutput(e.getMessage() + "\n");
+                break;
             } catch (DomainValidationException e) {
                 io.writeOutput("Invalid Data! " + e.getMessage());
                 break;
