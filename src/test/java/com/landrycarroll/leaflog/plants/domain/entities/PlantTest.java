@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class PlantTest {
 
@@ -27,6 +30,12 @@ public class PlantTest {
     public void shouldResetLastWateredDateWhenMarkedAsWatered() {
         // Arrange
         Date date = new Date();
+
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        Runnable task = () -> System.out.println("Wait for 1 second");
+        scheduler.schedule(task, 1, TimeUnit.SECONDS);
+        scheduler.shutdown();
+
         Plant plant = new Plant("Name", "Species", date, 7, "Notes");
 
         // Act
