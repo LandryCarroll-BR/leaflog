@@ -2,11 +2,10 @@ package com.landrycarroll.leaflog.plants.controllers;
 
 import com.landrycarroll.leaflog.infrastructure.UserIO;
 import com.landrycarroll.leaflog.plants.domain.entities.Plant;
-import com.landrycarroll.leaflog.plants.domain.exceptions.DomainValidationException;
+import com.landrycarroll.leaflog.plants.exceptions.DomainValidationException;
+import com.landrycarroll.leaflog.plants.exceptions.PlantException;
 import com.landrycarroll.leaflog.plants.services.PlantService;
 import com.landrycarroll.leaflog.plants.services.dtos.*;
-import com.landrycarroll.leaflog.plants.services.exceptions.PlantAlreadyExistsException;
-import com.landrycarroll.leaflog.plants.services.exceptions.UseCaseException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,6 +13,9 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Provides inputs for Plant CRUD operations to Plant Service and returns output to user
+ */
 public class PlantController {
     private final UserIO io;
     private final PlantService service;
@@ -44,8 +46,10 @@ public class PlantController {
 
                 // Extra spacing for CLI
                 io.writeOutput("\n");
-            } catch (PlantAlreadyExistsException e) {
-                io.writeOutput("A plant with that name already exists. Please try again.\n");
+            } catch (PlantException.PlantAlreadyExists e) {
+                io.writeOutput("A plant with that ID already exists. Please try again.\n");
+            } catch (PlantException.InvalidInput e) {
+                io.writeOutput(e.getMessage() + "\n");
             } catch (DomainValidationException e) {
                 io.writeOutput("Invalid Data! " + e.getMessage());
                 break;
@@ -92,7 +96,7 @@ public class PlantController {
 
                     io.writeOutput(plant.toString());
 
-                } catch (UseCaseException e) {
+                } catch (PlantException e) {
                     io.writeOutput(e.getMessage());
                 }
             }
@@ -121,8 +125,10 @@ public class PlantController {
 
             // Extra spacing for CLI
             io.writeOutput("\n");
-        } catch (UseCaseException e) {
-            io.writeOutput("Failed to add plant! " + e.getMessage());
+        } catch (PlantException.InvalidInput e) {
+            io.writeOutput("Invalid Input! " + e.getMessage());
+        } catch (PlantException.PlantNotFound e) {
+            io.writeOutput("Plant not found! " + e.getMessage());
         } catch (DomainValidationException e) {
             io.writeOutput("Invalid Data! " + e.getMessage());
         } catch (Exception e) {
@@ -150,8 +156,10 @@ public class PlantController {
 
             // Extra spacing for CLI
             io.writeOutput("\n");
-        } catch (UseCaseException e) {
-            io.writeOutput("Failed to add plant! " + e.getMessage());
+        } catch (PlantException.InvalidInput e) {
+            io.writeOutput("Invalid Input! " + e.getMessage());
+        } catch (PlantException.PlantNotFound e) {
+            io.writeOutput("Plant not found! " + e.getMessage());
         } catch (DomainValidationException e) {
             io.writeOutput("Invalid Data! " + e.getMessage());
         } catch (Exception e) {
@@ -177,8 +185,10 @@ public class PlantController {
 
             // Extra spacing for CLI
             io.writeOutput("\n");
-        } catch (UseCaseException e) {
-            io.writeOutput("Failed to add plant! " + e.getMessage());
+        } catch (PlantException.InvalidInput e) {
+            io.writeOutput("Invalid Input! " + e.getMessage());
+        } catch (PlantException.PlantNotFound e) {
+            io.writeOutput("Plant Not Found" + e.getMessage());
         } catch (DomainValidationException e) {
             io.writeOutput("Invalid Data! " + e.getMessage());
         } catch (Exception e) {
@@ -201,10 +211,6 @@ public class PlantController {
 
             // Extra spacing for CLI
             io.writeOutput("\n");
-        } catch (UseCaseException e) {
-            io.writeOutput("Failed to add plant! " + e.getMessage());
-        } catch (DomainValidationException e) {
-            io.writeOutput("Invalid Data! " + e.getMessage());
         } catch (Exception e) {
             io.writeOutput("An unexpected error occurred! " + e.getMessage());
         }
@@ -226,8 +232,10 @@ public class PlantController {
 
             // Extra spacing for CLI
             io.writeOutput("\n");
-        } catch (UseCaseException e) {
-            io.writeOutput("Failed to add plant! " + e.getMessage());
+        } catch (PlantException.InvalidInput e) {
+            io.writeOutput("Invalid Input: " + e.getMessage());
+        } catch (PlantException.PlantNotFound e) {
+            io.writeOutput("Plant not found! " + e.getMessage());
         } catch (DomainValidationException e) {
             io.writeOutput("Invalid Data! " + e.getMessage());
         } catch (Exception e) {

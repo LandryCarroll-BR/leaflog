@@ -1,9 +1,9 @@
 package com.landrycarroll.leaflog.plants.services;
 
 import com.landrycarroll.leaflog.plants.domain.entities.Plant;
+import com.landrycarroll.leaflog.plants.exceptions.PlantException;
 import com.landrycarroll.leaflog.plants.repositories.PlantRepository;
 import com.landrycarroll.leaflog.plants.services.dtos.*;
-import com.landrycarroll.leaflog.plants.services.exceptions.UseCaseException;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ public class PlantService {
         this.repository = repository;
     }
 
-    public Plant addPlant(AddPlantDTO dto) {
+    public Plant addPlant(AddPlantDTO dto) throws PlantException.PlantAlreadyExists, PlantException.InvalidInput {
         if (dto == null) {
-            throw new UseCaseException("AddPlantUseCase#execute called with null parameters");
+            throw new PlantException.InvalidInput("PlantService.addPlant: DTO must not be null");
         }
 
         try {
@@ -24,18 +24,24 @@ public class PlantService {
 
             Plant plant = new Plant(dto.getName(), dto.getSpecies(), dto.getLastWatered(), wateringFrequency, dto.getNotes());
 
+            Plant existingPlant = repository.findById(plant.getId().value());
+
+            if (existingPlant != null) {
+                throw new PlantException.PlantAlreadyExists("PlantService.addPlant: Plant Already Exists");
+            }
+
             repository.save(plant);
 
             return plant;
 
         } catch (NumberFormatException e) {
-            throw new UseCaseException("AddPlantUseCase#execute must provide valid watering frequency");
+            throw new PlantException.InvalidInput("PlantService.addPlant: Must provide valid watering frequency");
         }
     }
 
-    public boolean deletePlant(DeletePlantDTO dto) {
+    public boolean deletePlant(DeletePlantDTO dto) throws PlantException.InvalidInput, PlantException.PlantNotFound {
         if (dto == null) {
-            throw new UseCaseException("DeletePlantUseCase#execute Plant not found");
+            throw new PlantException.InvalidInput("PlantService.deletePlant: DTO must not be null");
         }
 
         try {
@@ -44,7 +50,7 @@ public class PlantService {
             Plant exitingPlant = this.repository.findById(id);
 
             if (exitingPlant == null) {
-                throw new UseCaseException("DeletePlantUseCase#execute: Plant with id " + id + " not found");
+                throw new PlantException.PlantNotFound("PlantService.deletePlant: Plant with ID " + id + " not found");
             }
 
             this.repository.deleteById(id);
@@ -52,13 +58,13 @@ public class PlantService {
             return true;
 
         } catch (NumberFormatException e) {
-            throw new RuntimeException(e);
+            throw new PlantException.InvalidInput("PlantService.deletePlant: Must provide valid ID");
         }
     }
 
-    public Plant editPlant(EditPlantDTO dto) {
+    public Plant editPlant(EditPlantDTO dto) throws PlantException.InvalidInput, PlantException.PlantNotFound {
         if (dto == null) {
-            throw new UseCaseException("EditPlantUseCase#execute: dto is null");
+            throw new PlantException.InvalidInput("PlantService.editPlant: DTO must not be null");
         }
 
         try {
@@ -66,7 +72,7 @@ public class PlantService {
             Plant plant = repository.findById(id);
 
             if (plant == null) {
-                throw new UseCaseException("EditPlantUseCase#execute: Plant with id " + id + " not found");
+                throw new PlantException.PlantNotFound("PlantService.editPlant: Plant with id " + id + " not found");
             }
 
             plant.updateDetails(dto.getName(), dto.getSpecies(), dto.getNotes());
@@ -78,17 +84,17 @@ public class PlantService {
             return plant;
 
         } catch (NumberFormatException e) {
-            throw new UseCaseException(e.getMessage());
+            throw new PlantException.InvalidInput("PlantService.editPlant: " + e.getMessage());
         }
     }
 
-    public Plant saveWateringInterval(SaveWateringIntervalDTO dto) {
+    public Plant saveWateringInterval(SaveWateringIntervalDTO dto) throws PlantException.InvalidInput, PlantException.PlantNotFound {
         if (dto == null) {
-            throw new UseCaseException("SaveWateringIntervalUseCase#execute: dto cannot be null");
+            throw new PlantException.InvalidInput("PlantService.saveWateringInterval: Dto cannot be null");
         }
 
         if (dto.getPlantId() == null) {
-            throw new UseCaseException("SaveWateringIntervalUseCase#execute: plant id cannot be null");
+            throw new PlantException.InvalidInput("PlantService.saveWateringInterval: Plant id cannot be null");
         }
 
         try {
@@ -99,14 +105,14 @@ public class PlantService {
             Plant plant = repository.findById(id);
 
             if (plant == null) {
-                throw new UseCaseException("SaveWateringIntervalUseCase#execute: Plant with id " + id + " not found");
+                throw new PlantException.InvalidInput("PlantService.saveWateringInterval: Plant with id " + id + " not found");
             }
 
             plant.updateWateringFrequency(frequency);
             this.repository.update(plant);
             return plant;
         } catch (NumberFormatException e) {
-            throw new UseCaseException(e.getMessage());
+            throw new PlantException.InvalidInput("PlantService.saveWateringInterval " + e.getMessage());
         }
     }
 
@@ -114,9 +120,9 @@ public class PlantService {
         return repository.findAll();
     }
 
-    public Plant waterPlant(WaterPlantDTO dto) {
+    public Plant waterPlant(WaterPlantDTO dto) throws PlantException.InvalidInput, PlantException.PlantNotFound {
         if (dto == null) {
-            throw new UseCaseException("WaterPlantUseCase#execute: Invalid waterPlantDTO");
+            throw new PlantException.InvalidInput("PlantService.waterPlant: Invalid waterPlantDTO");
         }
 
         try {
@@ -125,7 +131,7 @@ public class PlantService {
             Plant plant = this.repository.findById(id);
 
             if (plant == null) {
-                throw new UseCaseException("WaterPlantUseCase#execute: Plant with id " + id + " not found");
+                throw new PlantException.PlantNotFound("PlantService.waterPlant: Plant with id " + id + " not found");
             }
 
             plant.markAsWatered();
@@ -133,7 +139,7 @@ public class PlantService {
             return plant;
 
         } catch (NumberFormatException e) {
-            throw new UseCaseException(e.getMessage());
+            throw new PlantException.InvalidInput(e.getMessage());
         }
     }
 }

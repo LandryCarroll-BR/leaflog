@@ -1,6 +1,6 @@
 package com.landrycarroll.leaflog.plants.domain.valueobjects;
 
-import com.landrycarroll.leaflog.plants.domain.exceptions.DomainValidationException;
+import com.landrycarroll.leaflog.plants.exceptions.DomainValidationException;
 
 public record Notes(String value) {
     private static final int MAXIMUM_LENGTH = 500;

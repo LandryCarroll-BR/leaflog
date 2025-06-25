@@ -1,16 +1,19 @@
 package com.landrycarroll.leaflog.plants.services;
 
 import com.landrycarroll.leaflog.plants.domain.entities.Plant;
+import com.landrycarroll.leaflog.plants.exceptions.PlantException;
 import com.landrycarroll.leaflog.plants.repositories.PlantRepository;
 import com.landrycarroll.leaflog.plants.repositories.PlantRepositoryInMemory;
 import com.landrycarroll.leaflog.plants.services.dtos.*;
-import com.landrycarroll.leaflog.plants.services.exceptions.UseCaseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,7 +38,7 @@ public class PlantServiceTest {
 
         @Test
         public void shouldThrowExceptionIfNoDtoProvided() {
-            assertThrows(UseCaseException.class, () -> service.addPlant(null));
+            assertThrows(PlantException.class, () -> service.addPlant(null));
         }
 
         @Test
@@ -60,7 +63,7 @@ public class PlantServiceTest {
 
         @Test
         public void shouldThrowExceptionIfNoDtoProvided() {
-            assertThrows(UseCaseException.class, () -> service.deletePlant(null));
+            assertThrows(PlantException.class, () -> service.deletePlant(null));
         }
 
         @Test
@@ -87,7 +90,7 @@ public class PlantServiceTest {
 
         @Test
         public void shouldThrowExceptionIfNoDtoProvided() {
-            assertThrows(UseCaseException.class, () -> service.editPlant(null));
+            assertThrows(PlantException.class, () -> service.editPlant(null));
         }
 
         @Test
@@ -122,7 +125,7 @@ public class PlantServiceTest {
         public void shouldThrowExceptionWhenNoDTOProvided() {
             // Arrange
             // Act & Assert
-            assertThrows(UseCaseException.class, () -> service.saveWateringInterval(null));
+            assertThrows(PlantException.class, () -> service.saveWateringInterval(null));
         }
 
         @Test
@@ -179,7 +182,7 @@ public class PlantServiceTest {
 
         @Test
         public void shouldThrowExceptionIfNoDTOProvided() {
-            assertThrows(UseCaseException.class, () -> service.waterPlant(null));
+            assertThrows(PlantException.class, () -> service.waterPlant(null));
         }
 
         @Test
@@ -189,6 +192,12 @@ public class PlantServiceTest {
 
             // Arrange
             Date now = new Date();
+
+            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+            Runnable task = () -> System.out.println("Wait for 1 second");
+            scheduler.schedule(task, 1, TimeUnit.SECONDS);
+            scheduler.shutdown();
+
             Plant plant = new Plant("Name", "Species", now, 8, "Notes");
             repository.save(plant);
             WaterPlantDTO dto = new WaterPlantDTO(plant.getId().value().toString());
