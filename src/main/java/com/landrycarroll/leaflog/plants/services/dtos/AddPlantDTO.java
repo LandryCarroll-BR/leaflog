@@ -1,4 +1,4 @@
-package com.landrycarroll.leaflog.plants.usecases.dtos;
+package com.landrycarroll.leaflog.plants.services.dtos;
 
 import java.util.Date;
 

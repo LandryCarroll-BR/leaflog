@@ -1,4 +1,4 @@
-package com.landrycarroll.leaflog.plants.usecases.dtos;
+package com.landrycarroll.leaflog.plants.services.dtos;
 
 public class WaterPlantDTO {
     private String id;

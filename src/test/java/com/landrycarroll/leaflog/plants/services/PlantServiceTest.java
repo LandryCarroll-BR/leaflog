@@ -1,0 +1,205 @@
+package com.landrycarroll.leaflog.plants.services;
+
+import com.landrycarroll.leaflog.plants.domain.entities.Plant;
+import com.landrycarroll.leaflog.plants.repositories.PlantRepository;
+import com.landrycarroll.leaflog.plants.repositories.PlantRepositoryInMemory;
+import com.landrycarroll.leaflog.plants.services.dtos.*;
+import com.landrycarroll.leaflog.plants.services.exceptions.UseCaseException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class PlantServiceTest {
+    private PlantService service;
+    private PlantRepository repository;
+
+    @BeforeEach
+    public void setUp() {
+        repository = new PlantRepositoryInMemory();
+        service = new PlantService(repository);
+
+        Plant plant1 = new Plant("Name", "Species", new Date(), 8, "Notes");
+        Plant plant2 = new Plant("Name", "Species", new Date(), 8, "Notes");
+
+        repository.save(plant1);
+        repository.save(plant2);
+    }
+
+    @Nested
+    class AddPlant {
+
+        @Test
+        public void shouldThrowExceptionIfNoDtoProvided() {
+            assertThrows(UseCaseException.class, () -> service.addPlant(null));
+        }
+
+        @Test
+        public void shouldAddPlant() {
+            Date now = new Date();
+            AddPlantDTO dto = new AddPlantDTO("Name", "Species", "8", "Notes", now);
+
+            // Act
+            Plant addedPlant = service.addPlant(dto);
+
+            // Assert
+            assertEquals("Name", addedPlant.getName().value());
+            assertEquals("Species", addedPlant.getSpecies().value());
+            assertEquals(8, addedPlant.getWateringFrequency().value());
+            assertEquals("Notes", addedPlant.getNotes().value());
+            assertEquals(now, addedPlant.getLastWatered().value());
+        }
+    }
+
+    @Nested
+    class DeletePlant {
+
+        @Test
+        public void shouldThrowExceptionIfNoDtoProvided() {
+            assertThrows(UseCaseException.class, () -> service.deletePlant(null));
+        }
+
+        @Test
+        public void shouldDeletePlant() {
+            // Arrange
+            Date now = new Date();
+            Plant plant = new Plant("Name", "Species", now, 8, "Notes");
+            repository.save(plant);
+            DeletePlantDTO dto = new DeletePlantDTO(plant.getId().value().toString());
+            int plantListSize = repository.findAll().size();
+
+            // Act
+            boolean success = service.deletePlant(dto);
+
+            // Assert
+            assertEquals(plantListSize - 1, repository.findAll().size());
+            assertTrue(success);
+        }
+
+    }
+
+    @Nested
+    class EditPlant {
+
+        @Test
+        public void shouldThrowExceptionIfNoDtoProvided() {
+            assertThrows(UseCaseException.class, () -> service.editPlant(null));
+        }
+
+        @Test
+        public void shouldUpdatePlant() {
+            // Arrange
+            Plant plant = new Plant("Name", "Species", new Date(), 8, "Notes");
+            repository.save(plant);
+            EditPlantDTO dto = new EditPlantDTO(
+                    plant.getId().value().toString(),
+                    "New Name",
+                    "New Species",
+                    "New Notes",
+                    "14"
+            );
+
+            // Act
+            Plant updatedPLant = service.editPlant(dto);
+
+            // Assert
+            assertEquals("New Name", updatedPLant.getName().value());
+            assertEquals("New Species", updatedPLant.getSpecies().value());
+            assertEquals("New Notes", updatedPLant.getNotes().value());
+            assertEquals(14, updatedPLant.getWateringFrequency().value());
+        }
+
+    }
+
+    @Nested
+    class SavePlant {
+
+        @Test
+        public void shouldThrowExceptionWhenNoDTOProvided() {
+            // Arrange
+            // Act & Assert
+            assertThrows(UseCaseException.class, () -> service.saveWateringInterval(null));
+        }
+
+        @Test
+        public void shouldUpdateWateringInterval() {
+            // Arrange
+            Plant plant1 = new Plant("Name", "Species", new Date(), 8, "Notes");
+            Plant plant2 = new Plant("Name", "Species", new Date(), 8, "Notes");
+            repository.save(plant1);
+            repository.save(plant2);
+            SaveWateringIntervalDTO dto = new SaveWateringIntervalDTO("14", plant1.getId().value().toString());
+
+            // Act
+            Plant plantList = service.saveWateringInterval(dto);
+
+            // Assert
+            assertNotNull(plantList);
+            assertEquals(14, plantList.getWateringFrequency().value());
+        }
+
+    }
+
+    @Nested
+    class ViewPlant {
+
+        @Test
+        public void shouldReturnEmptyListWhenNoPlants() {
+            repository = new PlantRepositoryInMemory();
+            service = new PlantService(repository);
+
+            List<Plant> plants = service.viewPlantList();
+            assertTrue(plants.isEmpty());
+        }
+
+        @Test
+        public void shouldReturnPreviouslySavedPlants() {
+            // Arrange
+            Plant plant1 = new Plant("Name", "Species", new Date(), 8, "Notes");
+            Plant plant2 = new Plant("Name", "Species", new Date(), 8, "Notes");
+            repository.save(plant1);
+            repository.save(plant2);
+
+            // Act
+            List<Plant> plantList = service.viewPlantList();
+
+            // Assert
+            assertTrue(plantList.contains(plant1));
+            assertTrue(plantList.contains(plant2));
+        }
+
+    }
+
+    @Nested
+    class WaterPlant {
+
+        @Test
+        public void shouldThrowExceptionIfNoDTOProvided() {
+            assertThrows(UseCaseException.class, () -> service.waterPlant(null));
+        }
+
+        @Test
+        public void shouldWaterPlant() {
+            repository = new PlantRepositoryInMemory();
+            service = new PlantService(repository);
+
+            // Arrange
+            Date now = new Date();
+            Plant plant = new Plant("Name", "Species", now, 8, "Notes");
+            repository.save(plant);
+            WaterPlantDTO dto = new WaterPlantDTO(plant.getId().value().toString());
+
+            // Act
+            Plant updatedPlant = service.waterPlant(dto);
+
+            // Assert
+            assertTrue(now.getTime() < updatedPlant.getLastWatered().value().getTime());
+        }
+
+    }
+
+}

@@ -6,7 +6,7 @@ import com.landrycarroll.leaflog.infrastructure.UserIO;
 import com.landrycarroll.leaflog.plants.controllers.*;
 import com.landrycarroll.leaflog.plants.repositories.PlantRepository;
 import com.landrycarroll.leaflog.plants.repositories.PlantRepositoryInMemory;
-import com.landrycarroll.leaflog.plants.usecases.*;
+import com.landrycarroll.leaflog.plants.services.PlantService;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
@@ -20,32 +20,21 @@ public class LeaflogApplication {
         // Construct repository
         PlantRepository repository = new PlantRepositoryInMemory();
 
-        // Construct use cases
-        AddPlantUseCase addPlantFromInputUseCase = new AddPlantUseCase(repository);
-        DeletePlantUseCase deletePlantFromInputUseCase = new DeletePlantUseCase(repository);
-        EditPlantUseCase editPlantFromInputUseCase = new EditPlantUseCase(repository);
-        SaveWateringIntervalUseCase saveWateringIntervalUseCase = new SaveWateringIntervalUseCase(repository);
-        WaterPlantUseCase waterPlantUseCase = new WaterPlantUseCase(repository);
-        ViewPlantListUseCase viewPlantListUseCase = new ViewPlantListUseCase(repository);
+        // Construct service
+        PlantService plantService = new PlantService(repository);
 
-        // Construct controllers
-        Runnable addFromInput = new AddPlantController(io, addPlantFromInputUseCase);
-        Runnable deleteFromInput = new DeletePlantController(io, deletePlantFromInputUseCase);
-        Runnable editFromInput = new EditPlantController(io, editPlantFromInputUseCase);
-        Runnable saveWateringIntervalFromInput = new SaveWateringIntervalController(io, saveWateringIntervalUseCase);
-        Runnable waterPlantFromInput = new WaterPlantController(io, waterPlantUseCase);
-        Runnable viewPlantList = new ViewPlantListController(io, viewPlantListUseCase);
-        Runnable addPlantsFromFile = new AddPlantsFromFileController(io, addPlantFromInputUseCase);
+        // Construct controller
+        PlantController plantController = new PlantController(io, plantService);
 
         // Construct Menu
         new MenuBuilder(io)
-                .addOption("Add a Plant", addFromInput)
-                .addOption("Delete a Plant", deleteFromInput)
-                .addOption("Edit a Plant", editFromInput)
-                .addOption("Update the Watering Interval", saveWateringIntervalFromInput)
-                .addOption("Water a plant", waterPlantFromInput)
-                .addOption("View plant list", viewPlantList)
-                .addOption("Add plant from file", addPlantsFromFile)
+                .addOption("Add a Plant", plantController::addPlant)
+                .addOption("Delete a Plant", plantController::deletePlant)
+                .addOption("Edit a Plant", plantController::editPlant)
+                .addOption("Update the Watering Interval", plantController::saveWateringInterval)
+                .addOption("Water a plant", plantController::waterPlant)
+                .addOption("View plant list", plantController::viewPlantList)
+                .addOption("Add plant from file", plantController::addPlantsFromFile)
                 .build();
 
     }
