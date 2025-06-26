@@ -7,9 +7,13 @@ import com.landrycarroll.leaflog.plants.services.dtos.*;
 
 import java.util.List;
 
+/**
+ * Responsible for core CRUD operations for Plant entity
+ */
 public class PlantService {
     private final PlantRepository repository;
 
+    // Constructor requires plantRepository dependency
     public PlantService(PlantRepository repository) {
         this.repository = repository;
     }
