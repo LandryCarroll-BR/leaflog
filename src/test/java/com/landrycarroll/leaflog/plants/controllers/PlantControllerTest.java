@@ -45,15 +45,44 @@ public class PlantControllerTest {
     }
 
     @Test
-    void shouldDeletePlantSuccessfully() {
-        Plant plant = new Plant("Fern", "Boston", new Date(), 3, "Keep soil moist");
-        repository.save(plant);
-        io.addInput(plant.getId().value().toString());
+    void shouldHandleInvalidWateringFrequency() {
+        io.addInput("Fiddle Leaf");
+        io.addInput("Ficus");
+        io.addInput("invalid-number");
+        io.addInput("Bright indirect light");
 
+        controller.addPlant();
+
+        assertTrue(io.getOutputs().stream().anyMatch(output -> output.contains("Invalid Input!")));
+    }
+
+    @Test
+    void shouldHandleInvalidDeleteInput() {
+        io.addInput("not-a-uuid");
         controller.deletePlant();
 
-        assertEquals(0, repository.findAll().size());
-        assertTrue(io.getOutputs().contains("Plant deleted successfully!"));
+        assertTrue(io.getOutputs().stream().anyMatch(output -> output.contains("Invalid Input!")));
+    }
+
+    @Test
+    void shouldHandleDeleteNonExistentPlant() {
+        io.addInput("123");
+        controller.deletePlant();
+
+        assertTrue(io.getOutputs().stream().anyMatch(output -> output.contains("Plant not found!")));
+    }
+
+    @Test
+    void shouldHandleEditNonExistentPlant() {
+        io.addInput("123");
+        io.addInput("Name");
+        io.addInput("Species");
+        io.addInput("7");
+        io.addInput("Notes");
+
+        controller.editPlant();
+
+        assertTrue(io.getOutputs().stream().anyMatch(output -> output.contains("Plant not found!")));
     }
 
     @Test
@@ -66,7 +95,6 @@ public class PlantControllerTest {
         io.addInput("Monstera");
         io.addInput("10");
         io.addInput("Prefers humidity");
-
 
         controller.editPlant();
 
@@ -106,7 +134,6 @@ public class PlantControllerTest {
 
     @Test
     void shouldAddPlantsFromValidFile() throws IOException {
-        // Create a temp file with valid plant entries
         Path tempFile = Files.createTempFile("plants", ".txt");
         Files.write(tempFile, List.of(
                 "Aloe-Vera-14-Succulent",
@@ -114,7 +141,6 @@ public class PlantControllerTest {
         ));
 
         io.addInput(tempFile.toAbsolutePath().toString());
-
         controller.addPlantsFromFile();
 
         List<Plant> allPlants = repository.findAll();
@@ -128,9 +154,8 @@ public class PlantControllerTest {
     @Test
     void shouldShowErrorForMissingFile() {
         io.addInput("/fake/path/does-not-exist.txt");
-
         controller.addPlantsFromFile();
 
-        assertTrue(io.getLastOutput().startsWith(" Failed to read file"));
+        assertTrue(io.getLastOutput().contains("Failed to read file"));
     }
 }

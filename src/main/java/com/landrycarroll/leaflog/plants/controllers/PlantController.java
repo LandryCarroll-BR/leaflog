@@ -46,10 +46,12 @@ public class PlantController {
 
                 // Extra spacing for CLI
                 io.writeOutput("\n");
+                break;
             } catch (PlantException.PlantAlreadyExists e) {
                 io.writeOutput("A plant with that ID already exists. Please try again.\n");
             } catch (PlantException.InvalidInput e) {
-                io.writeOutput(e.getMessage() + "\n");
+                io.writeOutput("Invalid Input! " + e.getMessage() + "\n");
+                break;
             } catch (DomainValidationException e) {
                 io.writeOutput("Invalid Data! " + e.getMessage());
                 break;
@@ -103,7 +105,7 @@ public class PlantController {
 
         } catch (IOException e) {
             // Handle IO error
-            io.writeOutput("❌ Failed to read file: " + e.getMessage());
+            io.writeOutput("Failed to read file: " + e.getMessage());
         } catch (Exception e) {
             io.writeOutput("Unknown error occurred: " + e.getMessage());
         }
@@ -188,7 +190,7 @@ public class PlantController {
         } catch (PlantException.InvalidInput e) {
             io.writeOutput("Invalid Input! " + e.getMessage());
         } catch (PlantException.PlantNotFound e) {
-            io.writeOutput("Plant Not Found" + e.getMessage());
+            io.writeOutput("Plant not found! " + e.getMessage());
         } catch (DomainValidationException e) {
             io.writeOutput("Invalid Data! " + e.getMessage());
         } catch (Exception e) {

@@ -56,7 +56,14 @@ public class PlantServiceTest {
             assertEquals("Notes", addedPlant.getNotes().value());
             assertEquals(now, addedPlant.getLastWatered().value());
         }
+
+        @Test
+        public void shouldThrowIfWateringFrequencyInvalid() {
+            AddPlantDTO dto = new AddPlantDTO("Name", "Species", "invalid", "Notes", new Date());
+            assertThrows(PlantException.InvalidInput.class, () -> service.addPlant(dto));
+        }
     }
+
 
     @Nested
     class DeletePlant {
@@ -80,8 +87,22 @@ public class PlantServiceTest {
 
             // Assert
             assertEquals(plantListSize - 1, repository.findAll().size());
+            assertFalse(repository.findAll().contains(plant));
             assertTrue(success);
         }
+
+        @Test
+        public void shouldThrowIfIdIsInvalidFormat() {
+            DeletePlantDTO dto = new DeletePlantDTO("invalid");
+            assertThrows(PlantException.InvalidInput.class, () -> service.deletePlant(dto));
+        }
+
+        @Test
+        public void shouldThrowIfPlantNotFound() {
+            DeletePlantDTO dto = new DeletePlantDTO("99999");
+            assertThrows(PlantException.PlantNotFound.class, () -> service.deletePlant(dto));
+        }
+
 
     }
 
@@ -110,11 +131,25 @@ public class PlantServiceTest {
             Plant updatedPLant = service.editPlant(dto);
 
             // Assert
+            assertEquals(plant.getId(), updatedPLant.getId());
             assertEquals("New Name", updatedPLant.getName().value());
             assertEquals("New Species", updatedPLant.getSpecies().value());
             assertEquals("New Notes", updatedPLant.getNotes().value());
             assertEquals(14, updatedPLant.getWateringFrequency().value());
         }
+
+        @Test
+        public void shouldThrowIfIdInvalidFormat() {
+            EditPlantDTO dto = new EditPlantDTO("bad-id", "A", "B", "C", "10");
+            assertThrows(PlantException.InvalidInput.class, () -> service.editPlant(dto));
+        }
+
+        @Test
+        public void shouldThrowIfPlantNotFound() {
+            EditPlantDTO dto = new EditPlantDTO("99999", "A", "B", "C", "10");
+            assertThrows(PlantException.PlantNotFound.class, () -> service.editPlant(dto));
+        }
+
 
     }
 
@@ -123,8 +158,6 @@ public class PlantServiceTest {
 
         @Test
         public void shouldThrowExceptionWhenNoDTOProvided() {
-            // Arrange
-            // Act & Assert
             assertThrows(PlantException.class, () -> service.saveWateringInterval(null));
         }
 
@@ -138,17 +171,35 @@ public class PlantServiceTest {
             SaveWateringIntervalDTO dto = new SaveWateringIntervalDTO("14", plant1.getId().value().toString());
 
             // Act
-            Plant plantList = service.saveWateringInterval(dto);
+            Plant updatedPlant = service.saveWateringInterval(dto);
 
             // Assert
-            assertNotNull(plantList);
-            assertEquals(14, plantList.getWateringFrequency().value());
+            assertNotNull(updatedPlant);
+            assertEquals(14, updatedPlant.getWateringFrequency().value());
+        }
+
+        @Test
+        public void shouldThrowIfPlantIdIsNull() {
+            SaveWateringIntervalDTO dto = new SaveWateringIntervalDTO("10", null);
+            assertThrows(PlantException.InvalidInput.class, () -> service.saveWateringInterval(dto));
+        }
+
+        @Test
+        public void shouldThrowIfPlantIdInvalid() {
+            SaveWateringIntervalDTO dto = new SaveWateringIntervalDTO("10", "bad-id");
+            assertThrows(PlantException.InvalidInput.class, () -> service.saveWateringInterval(dto));
+        }
+
+        @Test
+        public void shouldThrowIfPlantNotFound() {
+            SaveWateringIntervalDTO dto = new SaveWateringIntervalDTO("10", "99999");
+            assertThrows(PlantException.InvalidInput.class, () -> service.saveWateringInterval(dto));
         }
 
     }
 
     @Nested
-    class ViewPlant {
+    class ViewPlants {
 
         @Test
         public void shouldReturnEmptyListWhenNoPlants() {
@@ -208,6 +259,19 @@ public class PlantServiceTest {
             // Assert
             assertTrue(now.getTime() < updatedPlant.getLastWatered().value().getTime());
         }
+
+        @Test
+        public void shouldThrowIfIdInvalidFormat() {
+            WaterPlantDTO dto = new WaterPlantDTO("not-a-number");
+            assertThrows(PlantException.InvalidInput.class, () -> service.waterPlant(dto));
+        }
+
+        @Test
+        public void shouldThrowIfPlantNotFound() {
+            WaterPlantDTO dto = new WaterPlantDTO("99999");
+            assertThrows(PlantException.PlantNotFound.class, () -> service.waterPlant(dto));
+        }
+
 
     }
 
