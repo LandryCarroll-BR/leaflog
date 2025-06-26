@@ -50,7 +50,7 @@ public class PlantController {
             } catch (PlantException.PlantAlreadyExists e) {
                 io.writeOutput("A plant with that ID already exists. Please try again.\n");
             } catch (PlantException.InvalidInput e) {
-                io.writeOutput(e.getMessage() + "\n");
+                io.writeOutput("Invalid Input! " + e.getMessage() + "\n");
                 break;
             } catch (DomainValidationException e) {
                 io.writeOutput("Invalid Data! " + e.getMessage());
