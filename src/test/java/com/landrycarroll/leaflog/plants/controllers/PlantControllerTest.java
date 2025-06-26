@@ -53,8 +53,6 @@ public class PlantControllerTest {
 
         controller.addPlant();
 
-        System.out.println(io.getOutputs());
-
         assertTrue(io.getOutputs().stream().anyMatch(output -> output.contains("Invalid Input!")));
     }
 
