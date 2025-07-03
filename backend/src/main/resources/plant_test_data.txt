@@ -1,0 +1,20 @@
+Fern - Asparagus - 14 - Prefers humidity
+Aloe - Vera - 14 - Prefers humidity
+Cactus - Echinopsis - 3 - Water weekly
+Basil - Ocimum - 5 - Water weekly
+Orchid - Phalaenopsis - 2 - Good for indoors
+Lily - Lilium - 8 - Keep soil moist
+Bamboo - Poaceae - 4 - Water weekly
+Mint - Mentha - 11 - Bright light
+Rosemary - Rosmarinus - 14 - Avoid direct sun
+Tulip - Tulipa - 14 - Bright light
+Succulent - Sedum - 5 - Fertilize monthly
+Spider Plant - Chlorophytum - 7 - Avoid direct sun
+Pothos - Epipremnum - 7 - Avoid direct sun
+Snake Plant - Dracaena - 8 - 
+Jade - Crassula - 12 - Water weekly
+Lavender - Lavandula - 6 - Bright light
+Peace Lily - Spathiphyllum - 8 - 
+Zebra Plant - Aphelandra - 4 - Pet-friendly
+Ficus - Ficus - 11 - Pet-friendly
+Palm - Arecaceae - 3 - 
