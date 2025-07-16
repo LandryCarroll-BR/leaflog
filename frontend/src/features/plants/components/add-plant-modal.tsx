@@ -60,8 +60,8 @@ export function AddPlantModal({ children }: { children?: React.ReactNode }) {
                 <Input
                   label="Watering Frequency"
                   type="number"
-                  error={formState.errors['wateringFrequencyAsString']}
-                  registration={register('wateringFrequencyAsString')}
+                  error={formState.errors['wateringFrequencyInDays']}
+                  registration={register('wateringFrequencyInDays')}
                 />
 
                 <Input

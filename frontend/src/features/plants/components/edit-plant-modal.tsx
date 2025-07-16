@@ -56,16 +56,12 @@ export function EditPlantModal({
             {({ register, formState }) => (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <input
-                    {...register('id')}
-                    defaultValue={plant.id.value}
-                    hidden
-                  />
+                  <input {...register('id')} defaultValue={plant.id} hidden />
                   <Input
                     label="Name"
                     error={formState.errors['name']}
                     registration={register('name')}
-                    defaultValue={plant.name.value}
+                    defaultValue={plant.plantName.value}
                   />
 
                   <Input
@@ -79,8 +75,8 @@ export function EditPlantModal({
                 <Input
                   label="Watering Frequency"
                   type="number"
-                  error={formState.errors['wateringFrequency']}
-                  registration={register('wateringFrequency')}
+                  error={formState.errors['wateringFrequencyInDays']}
+                  registration={register('wateringFrequencyInDays')}
                   defaultValue={plant.wateringFrequency.value.toString()}
                 />
 

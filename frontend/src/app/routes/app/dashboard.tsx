@@ -26,7 +26,7 @@ const DashboardRoute = () => {
       }
     >
       <div className="space-y-4 max-w-xl mx-auto">
-        {data?.map((plant) => <PlantCard key={plant.id.value} plant={plant} />)}
+        {data?.map((plant) => <PlantCard key={plant.id} plant={plant} />)}
       </div>
     </ContentLayout>
   );

@@ -11,9 +11,12 @@ export const editPlantInputSchema = z.object({
   id: z.string().min(1, 'Required'),
   name: z.string().min(1, 'Required'),
   species: z.string().min(1, 'Required'),
-  wateringFrequency: z.coerce.number().min(1, 'Must be at least 1 day'),
+  wateringFrequencyInDays: z.coerce.number().min(1, 'Must be at least 1 day'),
   notes: z.string().optional(),
-  lastWatered: z.coerce.date(),
+  lastWatered: z.coerce
+    .date()
+    .optional()
+    .default(() => new Date()),
 });
 
 export type EditPlantInput = z.infer<typeof editPlantInputSchema>;
@@ -24,6 +27,7 @@ export const editPlant = ({
   data: EditPlantInput;
 }): Promise<Plant> => {
   const { id, ...rest } = data;
+  console.log('Editing plant with data:', data);
   return api.put(`/plants/${data.id}`, rest);
 };
 

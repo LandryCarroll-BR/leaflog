@@ -6,7 +6,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from '@/components/catalyst/alert';
-import { Form, Input, Textarea } from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
 import { useNotifications } from '@/components/ui/notifications';
 import {
   deletePlantInputSchema,
@@ -43,7 +43,7 @@ export function DeletePlantModal({
       </Button>
       <Alert open={isOpen} onClose={setIsOpen} title="Delete Plant">
         <AlertTitle>
-          Are you sure you want to delete {plant.name.value}?
+          Are you sure you want to delete {plant.plantName.value}?
         </AlertTitle>
         <AlertDescription>
           This action cannot be undone. All data associated with this plant will
@@ -62,11 +62,7 @@ export function DeletePlantModal({
             {({ register }) => (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <input
-                    {...register('id')}
-                    defaultValue={plant.id.value}
-                    hidden
-                  />
+                  <input {...register('id')} defaultValue={plant.id} hidden />
                 </div>
 
                 <AlertActions>

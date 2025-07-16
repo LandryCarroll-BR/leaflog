@@ -50,7 +50,8 @@ export type Comment = Entity<{
 }>;
 
 export type Plant = {
-  name: {
+  id: string;
+  plantName: {
     value: string;
   };
   species: {
@@ -58,14 +59,11 @@ export type Plant = {
   };
   wateringFrequency: {
     value: number; // in days
-  }; // in days
+  };
   notes: {
     value: string;
   };
   lastWatered: {
-    value: string;
-  };
-  id: {
-    value: string;
+    value: string; // ISO date string
   };
 };

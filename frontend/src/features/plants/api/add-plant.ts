@@ -10,7 +10,7 @@ import { getPlantsQueryOptions } from './get-plants';
 export const addPlantInputSchema = z.object({
   name: z.string().min(1, 'Required'),
   species: z.string().min(1, 'Required'),
-  wateringFrequencyAsString: z.coerce.number().min(1, 'Must be at least 1 day'),
+  wateringFrequencyInDays: z.coerce.number().min(1, 'Must be at least 1 day'),
   notes: z.string().optional(),
   lastWatered: z.coerce
     .date()

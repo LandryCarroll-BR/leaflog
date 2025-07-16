@@ -18,8 +18,7 @@ export const deletePlant = ({
 }: {
   data: DeletePlantInput;
 }): Promise<Plant> => {
-  const { id, ...rest } = data;
-  return api.delete(`/plants/${data.id}`, rest);
+  return api.delete(`/plants/${data.id}`);
 };
 
 type UseDeletePlantOptions = {

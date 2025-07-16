@@ -37,12 +37,12 @@ export function PlantCard({ plant }: { plant: Plant }) {
     <div className="border p-4 rounded-xl shadow flex flex-col gap-2">
       <div className="flex items-center justify-between gap-4">
         <Heading level={2} className="!text-lg">
-          {plant.name.value}
+          {plant.plantName.value}
         </Heading>
         {isReadyForWatering && (
           <Button
             onClick={() =>
-              waterPlantMutation.mutate({ data: { id: plant.id.value } })
+              waterPlantMutation.mutate({ data: { id: plant.id } })
             }
             color="emerald"
             className="ml-auto"
