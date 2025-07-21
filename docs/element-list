@@ -1,0 +1,12 @@
+com.landrycarroll.leaflog
+com.landrycarroll.leaflog.config
+com.landrycarroll.leaflog.infrastructure
+com.landrycarroll.leaflog.plantmanagement.assemblers
+com.landrycarroll.leaflog.plantmanagement.controllers
+com.landrycarroll.leaflog.plantmanagement.domain.converters
+com.landrycarroll.leaflog.plantmanagement.domain.entities
+com.landrycarroll.leaflog.plantmanagement.domain.valueobjects
+com.landrycarroll.leaflog.plantmanagement.dtos
+com.landrycarroll.leaflog.plantmanagement.exceptions
+com.landrycarroll.leaflog.plantmanagement.repositories
+com.landrycarroll.leaflog.plantmanagement.services
